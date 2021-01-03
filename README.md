@@ -2,7 +2,10 @@
 
 Welcome to my repo for some commonly requested coding questions relating to NBA statistics/analysis. We're going to hopefully cover a wide range of topics of varying complexity, but nothing too crazy. Of note, there won't be much on scraping here as that's not an area of expertise for me, and I don't want to provide code I can't explain in depth. 
 
-The code presented here is written for maximum readability at potentially the expense of maxmimum performance or best practice. These repos are designed to get you off the ground - not to be anywhere close to a finished product. Take the code apart and get wierd with it. Each folder should have an .md and a .ipynb to show R and python respectively. Whenever possible I tried to literally duplicate the code to help people learn both languages. I generally start in R and then translate to python. All the data is provided.
+1) The code presented here is written for maximum readability at potentially the expense of maxmimum performance or best practice. This is not prod level code. 
+2) These repos are designed to get you off the ground - not to be anywhere close to a finished product. Take the code apart and get wierd with it. 
+3) Each folder should have an .md and a .ipynb to show R and python respectively. Whenever possible I tried to literally duplicate the code to help people learn both languages. I generally start in R and then translate to python. All the data is provided.
+4) Reach out to me on Twitter with questions/comments/concerns.
 
 
 ## People to Follow/Learn From
