@@ -168,3 +168,4 @@ vignettes/*.pdf
 
 # Misc
 *.feather
+*.Rproj
