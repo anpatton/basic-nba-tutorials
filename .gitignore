@@ -169,3 +169,4 @@ vignettes/*.pdf
 # Misc
 *.feather
 *.Rproj
+shot-quality/create_data.R
