@@ -170,3 +170,5 @@ vignettes/*.pdf
 *.feather
 *.Rproj
 shot-quality/create_data.R
+shot-quality/court_lines.R
+shot-quality/KOBE model v2.RData
