@@ -123,7 +123,7 @@ This is our starting point. This model takes binary flags for FG2 and
 FG3 and then returns an expected point per shot value (xPPS). Although,
 let’s consider if we actually need an intercept here - what would the
 xPPS be if FG2 = 0 and FG3 = 0? It would be zero, so we can actually get
-rid of the intercept entirely. You could over course also remove one of
+rid of the intercept entirely. You could of course also remove one of
 FG2 or FG3 as well and keep the intercept, but I like it this way for
 presentation purposes. EMBIID v1.0 is presented below.
 
@@ -299,9 +299,9 @@ three_error <- mltools::rmse(preds = threes$pps_pred,
 ```
 
 This time our RMSE for twos is a slightly smaller 0.203 and 0.364 for
-threes and a teeny tiny increase in R2. Better on twos now which makes
-sense given that a average rim look is far more likely to go in in than
-an average 19’ jumper, almost regardless of context.
+threes. Better on twos now which makes sense given that a average rim
+look is far more likely to go in in than an average 19’ jumper, almost
+regardless of context.
 
 However, you might be thinking “Aren’t we modeling if a shot goes in or
 not, an inherently binary (yes/no) task? Can’t we use a classifier?”.
