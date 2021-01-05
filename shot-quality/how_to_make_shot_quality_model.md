@@ -22,8 +22,8 @@ and name ours **EMBIID**, or **E**xtremely **M**ediocre to **B**ad
 **I**ntroductory scor**I**ng mo**D**el.
 
 We’re going to be using exclusively shot data derived from play-by-play
-data - no tracking or demographic info here. The shots are 20,000 random
-fieldgoal attempts from the 2018 and 2019 regular seasons.
+data - no tracking or demographic info here. The shots are 100,000
+random fieldgoal attempts from the 2018 and 2019 regular seasons.
 
 ## Get the Data Set Up
 
@@ -39,7 +39,7 @@ library(tidyverse)
 
 ## Read in the data
 shots <- read_csv("data/shots.csv")
-set.seed(42)
+set.seed(111)
 
 ## Yep, looks like shot data
 print(head(shots))
@@ -48,12 +48,12 @@ print(head(shots))
     ## # A tibble: 6 x 18
     ##   event_team home_team away_team game_date           event_type quarter_time
     ##   <chr>      <chr>     <chr>     <dttm>              <chr>      <time>      
-    ## 1 Charlotte… Brooklyn… Charlott… 2019-11-21 00:30:00 twopointm… 08:10       
-    ## 2 Memphis G… Memphis … Denver N… 2020-01-29 01:00:00 twopointm… 04:23       
-    ## 3 Detroit P… Detroit … Milwauke… 2020-02-21 00:00:00 threepoin… 09:51       
-    ## 4 New Orlea… Golden S… New Orle… 2019-12-21 03:30:00 twopointm… 03:51       
-    ## 5 Boston Ce… Boston C… Orlando … 2019-04-07 23:30:00 twopointm… 02:41       
-    ## 6 Houston R… Houston … New Orle… 2019-01-30 01:00:00 threepoin… 10:05       
+    ## 1 Detroit P… Detroit … Charlott… 2018-11-11 20:30:00 twopointm… 10:04       
+    ## 2 Boston Ce… Boston C… Toronto … 2018-11-17 00:00:00 threepoin… 10:11       
+    ## 3 Denver Nu… Denver N… Minnesot… 2020-02-23 23:00:00 twopointm… 06:13       
+    ## 4 Phoenix S… Phoenix … Oklahoma… 2018-11-18 02:00:00 threepoin… 09:08       
+    ## 5 Los Angel… Clevelan… Los Ange… 2020-02-10 00:30:00 twopointm… 03:09       
+    ## 6 Boston Ce… New York… Boston C… 2019-02-02 00:30:00 threepoin… 06:18       
     ## # … with 12 more variables: quarter <dbl>, event_description <chr>,
     ## #   player_name <chr>, shot_style <chr>, shot_made <dbl>, points <dbl>,
     ## #   season <dbl>, seconds_elapsed <dbl>, shot_type <chr>, x <dbl>, y <dbl>,
@@ -85,14 +85,14 @@ ggplot() +
 Well, that certainly looks correct or close enough. However, there are
 quite a few heaves that we probably want to take out of the model since
 we probably(?) don’t care about those. Let’s limit it to shots 32 feet
-and closer (the top line of the little court). We only lose about 120
+and closer (the top line of the little court). We only lose about 600
 shots by doing this, so shouldn’t be an issue.
 
 ``` r
 print(nrow(shots))
 ```
 
-    ## [1] 20000
+    ## [1] 100000
 
 ``` r
 shots <- shots %>% 
@@ -101,7 +101,7 @@ shots <- shots %>%
 print(nrow(shots))
 ```
 
-    ## [1] 19881
+    ## [1] 99391
 
 ## Pre-Modeling Interlude
 
@@ -117,20 +117,20 @@ The good news about a PPS model is that there is an extremely obvious
 first pass model to either test or at least consider. Very slight math
 warning approaching.
 
-\[
-xPPS = {\beta_0} + {\beta_1}*FG2 + {\beta_2} * FG3   
-\] This is our starting point. This model takes binary flags for FG2 and
+![](how_to_make_shot_quality_model_files/eq1.gif)<!-- -->
+
+This is our starting point. This model takes binary flags for FG2 and
 FG3 and then returns an expected point per shot value (xPPS). Although,
 let’s consider if we actually need an intercept here - what would the
 xPPS be if FG2 = 0 and FG3 = 0? It would be zero, so we can actually get
-rid of the intercept entirely. EMBIID v1.0 is presented below.
+rid of the intercept entirely. You could over course also remove one of
+FG2 or FG3 as well and keep the intercept, but I like it this way for
+presentation purposes. EMBIID v1.0 is presented below.
 
-\[
-xPPS = {\beta_1}*FG2 + {\beta_2} * FG3   
-\]
+![](how_to_make_shot_quality_model_files/eq2.gif)<!-- -->
 
-Now, let’s use this model setup to train on 15,000 random shots and
-train on 5,000 random shots and see how we do. Fun fact, I learned about
+Now, let’s use this model setup to train on 75% of the data and test on
+25% of the data and see how we do. Fun fact, I learned about
 `tidymodels::initial_split()` while writing this\!
 
 ``` r
@@ -156,21 +156,21 @@ summary(model)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -1.1275 -1.1042 -1.1042  0.8958  1.8725 
+    ## -1.1012 -1.1012 -1.0839  0.8988  1.9161 
     ## 
     ## Coefficients:
     ##     Estimate Std. Error t value Pr(>|t|)    
-    ## fg2  1.10421    0.01235   89.41   <2e-16 ***
-    ## fg3  1.12746    0.01583   71.22   <2e-16 ***
+    ## fg2 1.101186   0.005510   199.9   <2e-16 ***
+    ## fg3 1.083863   0.007037   154.0   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.189 on 14909 degrees of freedom
-    ## Multiple R-squared:  0.4671, Adjusted R-squared:  0.467 
-    ## F-statistic:  6533 on 2 and 14909 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 1.184 on 74542 degrees of freedom
+    ## Multiple R-squared:  0.4607, Adjusted R-squared:  0.4606 
+    ## F-statistic: 3.183e+04 on 2 and 74542 DF,  p-value: < 2.2e-16
 
-Good news - our model makes sense. In general, FG3 are slightly more
-efficient from a PPS standpoint than FG2. Now before you go ahead and
+Good news - our model makes sense. Our FG2 and FG3 coefficients are nice
+here because they’re just points per shot\! Now before you go ahead and
 start yelling about how the game has changed, keep in mind that there is
 **zero** contextualizing information here - just the most basic league
 wide efficiency model. Now let’s test.
@@ -206,7 +206,7 @@ ggplot(data = twos) +
   geom_violin(aes(x = pps_actual, y = pps_pred), fill = "darkgray") +
   geom_jitter(aes(x = pps_actual, y = pps_pred, color = resid_per_shot, size = number_of_shots), 
              shape = 16, alpha = 0.75, height = 0.1) +
-  scale_y_continuous(breaks = c(1.11)) +
+  scale_y_continuous(breaks = c(1.102)) +
   scale_color_gradient2(low = "blue",
                         mid = "white",
                         midpoint = 0,
@@ -221,7 +221,7 @@ ggplot(data = twos) +
   theme_bw(base_size = 16)
 ```
 
-![](how_to_make_shot_quality_model_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](how_to_make_shot_quality_model_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 two_error <- mltools::rmse(preds = twos$pps_pred, 
@@ -233,39 +233,38 @@ three_error <- mltools::rmse(preds = threes$pps_pred,
                            weights = threes$number_of_shots)
 ```
 
-Well our attempted weighted RMSE for twos is 0.42 and 0.67 for threes.
-Not particularly great\! But, that’s to be expected as we’re treating
-every single FG2 the same and every FG3 the same. Let’s add some spatial
-information in and see if we do better.
+Well our attempted weighted RMSE for twos is 0.223 and 0.363 for threes.
+Not particularly great, but RMSE might also not be the best way to
+evaluate this model (not going to be covered here, but this is something
+to consider)\! But, that’s to be expected as we’re treating every single
+FG2 the same and every FG3 the same. Let’s add some spatial information
+in and see if we do better.
 
 ``` r
-model <- lm(points ~  fg2 + fg3 + x + y + shot_distance + 0, data = train_shots)
+model <- lm(points ~ fg2 + fg3 + shot_distance + 0, data = train_shots)
 
 summary(model)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = points ~ fg2 + fg3 + x + y + shot_distance + 0, 
-    ##     data = train_shots)
+    ## lm(formula = points ~ fg2 + fg3 + shot_distance + 0, data = train_shots)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -1.3729 -1.1145 -0.6275  0.8681  2.0815 
+    ## -1.3678 -1.0812 -0.6585  0.8476  2.1182 
     ## 
     ## Coefficients:
     ##                 Estimate Std. Error t value Pr(>|t|)    
-    ## fg2            1.3770080  0.0188056  73.223   <2e-16 ***
-    ## fg3            2.0542324  0.0520746  39.448   <2e-16 ***
-    ## x              0.0009403  0.0008723   1.078    0.281    
-    ## y             -0.0008848  0.0018670  -0.474    0.636    
-    ## shot_distance -0.0347949  0.0025482 -13.654   <2e-16 ***
+    ## fg2            1.3743111  0.0083377  164.83   <2e-16 ***
+    ## fg3            2.0057908  0.0224262   89.44   <2e-16 ***
+    ## shot_distance -0.0351676  0.0008133  -43.24   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.174 on 14906 degrees of freedom
-    ## Multiple R-squared:  0.4802, Adjusted R-squared:   0.48 
-    ## F-statistic:  2754 on 5 and 14906 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 1.17 on 74541 degrees of freedom
+    ## Multiple R-squared:  0.4738, Adjusted R-squared:  0.4738 
+    ## F-statistic: 2.238e+04 on 3 and 74541 DF,  p-value: < 2.2e-16
 
 ``` r
 predictions <- predict(model, newdata = test_shots)
@@ -295,9 +294,134 @@ two_error <- mltools::rmse(preds = twos$pps_pred,
                            weights = twos$number_of_shots)
 
 three_error <- mltools::rmse(preds = threes$pps_pred, 
-                           actuals = threes$pps_actual, 
-                           weights = threes$number_of_shots)
+                             actuals = threes$pps_actual, 
+                             weights = threes$number_of_shots)
 ```
 
-This time our RMSE for twos is 0.4 and 0.67 for threes. Not particularly
-great, but better\!
+This time our RMSE for twos is a slightly smaller 0.203 and 0.364 for
+threes and a teeny tiny increase in R2. Better on twos now which makes
+sense given that a average rim look is far more likely to go in in than
+an average 19’ jumper, almost regardless of context.
+
+However, you might be thinking “Aren’t we modeling if a shot goes in or
+not, an inherently binary (yes/no) task? Can’t we use a classifier?”.
+Yes. Yes we can, and I actually prefer that methodology. Let’s build
+EMBIID 3.0 using a logistic classifier. Also, how about another two
+improvements with some crude feature crafting. We know that in terms of
+twos, rim FGA are the easiest shots and for threes, it’s corner threes
+(both by distance and that they tend to me assisted more often). So
+let’s make a rim FGA and corner three FGA flag and stick that in there
+as well. [Hit this link if you need a quick refresher on how to
+interpret the output (IDRE is
+awesome)](https://stats.idre.ucla.edu/r/dae/logit-regression/).
+
+``` r
+shot_split <- shots %>% 
+  mutate(fg2 = ifelse(shot_type == "2PT Field Goal", 1, 0)) %>% 
+  mutate(fg3 = ifelse(shot_type == "3PT Field Goal", 1, 0)) %>% 
+  mutate(rim_fg = ifelse(shot_distance <= 6, 1, 0)) %>% 
+  mutate(corner_three = ifelse(fg3 == 1 & y <= 5, 1, 0)) %>% 
+  initial_split(prop = 0.75) 
+
+train_shots <- training(shot_split)
+test_shots <- testing(shot_split)
+
+model <- glm(shot_made ~ fg2 + shot_distance + rim_fg + corner_three, 
+             data = train_shots, 
+             family = "binomial")
+summary(model)
+```
+
+    ## 
+    ## Call:
+    ## glm(formula = shot_made ~ fg2 + shot_distance + rim_fg + corner_three, 
+    ##     family = "binomial", data = train_shots)
+    ## 
+    ## Deviance Residuals: 
+    ##    Min      1Q  Median      3Q     Max  
+    ## -1.505  -1.001  -0.913   1.214   1.516  
+    ## 
+    ## Coefficients:
+    ##               Estimate Std. Error z value Pr(>|z|)    
+    ## (Intercept)    0.26276    0.07239   3.630 0.000284 ***
+    ## fg2           -0.14419    0.03975  -3.627 0.000286 ***
+    ## shot_distance -0.03222    0.00265 -12.156  < 2e-16 ***
+    ## rim_fg         0.63161    0.03494  18.078  < 2e-16 ***
+    ## corner_three   0.05645    0.03406   1.657 0.097497 .  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## (Dispersion parameter for binomial family taken to be 1)
+    ## 
+    ##     Null deviance: 103211  on 74543  degrees of freedom
+    ## Residual deviance:  97756  on 74539  degrees of freedom
+    ## AIC: 97766
+    ## 
+    ## Number of Fisher Scoring iterations: 4
+
+Snazzy. Our two new variables appear to add value to the model (EMBIID
+3.0), so let’s take a look at some testing results.
+
+``` r
+library(knitr)
+
+## don't forget type = "response" if you want probabilities from this
+preds <- predict(model, newdata = test_shots, type = "response")
+
+test_shots <- test_shots %>% 
+  mutate(xFG = preds) %>% 
+  mutate(xPTS = ifelse(shot_type == "2PT Field Goal", 2 * xFG, 3 * xFG)) %>% 
+  ungroup()
+
+fg2 <- test_shots %>% 
+  group_by(player_name, shot_type) %>% 
+  summarise(PTS = sum(points),
+            xPTS = sum(xPTS),
+            number_of_shots = n(),
+            number_of_makes = sum(shot_made), 
+            `xFG%` = mean(xFG)) %>% 
+  ungroup() %>% 
+  mutate(mean_FG = number_of_makes/number_of_shots) %>% 
+  filter(shot_type == "2PT Field Goal") %>% 
+  top_n(10, wt = number_of_shots) %>% 
+  mutate(`FG%` = round(mean_FG, 3)) %>% 
+  mutate(`xFG%`= round(`xFG%`, 3)) %>% 
+  mutate(xPTS = round(xPTS, 1)) %>% 
+  select(Player = player_name,
+         FG2A = number_of_shots,
+         FG2M = number_of_makes,
+         `FG%`,
+         `xFG%`,
+         PTS,
+         xPTS) %>% 
+  mutate(`Shot Making` = round((PTS - xPTS)/FG2A, 2))
+         
+
+knitr::kable(fg2, align = "c", caption = "Shot Making for Top Ten by FG2A")
+```
+
+|        Player         | FG2A | FG2M |  FG%  | xFG%  | PTS | xPTS  | Shot Making |
+| :-------------------: | :--: | :--: | :---: | :---: | :-: | :---: | :---------: |
+|     Anthony Davis     | 115  |  59  | 0.513 | 0.532 | 118 | 122.3 |   \-0.04    |
+|     Bradley Beal      | 112  |  63  | 0.562 | 0.536 | 126 | 120.2 |    0.05     |
+|     DeMar DeRozan     | 140  |  74  | 0.529 | 0.489 | 148 | 136.9 |    0.08     |
+|   Donovan Mitchell    | 116  |  52  | 0.448 | 0.522 | 104 | 121.1 |   \-0.15    |
+| Giannis Antetokounmpo | 127  |  83  | 0.654 | 0.598 | 166 | 151.9 |    0.11     |
+|   LaMarcus Aldridge   | 136  |  81  | 0.596 | 0.502 | 162 | 136.5 |    0.19     |
+|     LeBron James      | 117  |  73  | 0.624 | 0.580 | 146 | 135.6 |    0.09     |
+|    Nikola Vucevic     | 136  |  79  | 0.581 | 0.520 | 158 | 141.6 |    0.12     |
+|   Russell Westbrook   | 130  |  71  | 0.546 | 0.552 | 142 | 143.4 |   \-0.01    |
+|      Zach LaVine      | 116  |  52  | 0.448 | 0.562 | 104 | 130.3 |   \-0.23    |
+
+Shot Making for Top Ten by FG2A
+
+So here we have a table that shows the players with the top ten most
+FG2A in our test set and their various actual and predicted FG% and
+points scored. The last column, ‘Shot Making’ shows on a per shot basis,
+the differential between that player taking the shot and more or less
+the league average. DDR is positive because he’s quite good at the
+midrange compared to the rest of the league, whereas someone like Zach
+LaVine is significantly negative on a per shot basis. Now you have been
+armed with the tools to explore your own quality models. Think about how
+to include player level information, matchups, lineups, etc. You can get
+as crazy as you want to with these.
