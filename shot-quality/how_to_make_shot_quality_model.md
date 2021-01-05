@@ -421,7 +421,15 @@ points scored. The last column, ‘Shot Making’ shows on a per shot basis,
 the differential between that player taking the shot and more or less
 the league average. DDR is positive because he’s quite good at the
 midrange compared to the rest of the league, whereas someone like Zach
-LaVine is significantly negative on a per shot basis. Now you have been
-armed with the tools to explore your own quality models. Think about how
-to include player level information, matchups, lineups, etc. You can get
-as crazy as you want to with these.
+LaVine is significantly negative on a per shot basis. However, as the
+number one ball handling option on their team, sometimes lead guard
+types can be forced to take the junk shots or end of clock shots that no
+one else can get/create for themselves. Also, they might not be on the
+receiving end of many high quality passes. Just things to think about
+when using these context free models to make any Big Internet Takes.
+
+Now you have been armed with the tools to explore your own quality
+models. Think about how to include player level information, matchups,
+lineups, etc. You can get as crazy as you want to with these. See if you
+can duplicate some of the information in KOBE (you won’t be able to
+because it’s SportVU data) but do your best.
