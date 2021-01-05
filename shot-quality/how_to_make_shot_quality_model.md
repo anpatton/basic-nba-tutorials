@@ -117,7 +117,7 @@ The good news about a PPS model is that there is an extremely obvious
 first pass model to either test or at least consider. Very slight math
 warning approaching.
 
-![](how_to_make_shot_quality_model_files/eq1.gif)<!-- -->
+<img src="how_to_make_shot_quality_model_files/eq1.PNG" width="302" />
 
 This is our starting point. This model takes binary flags for FG2 and
 FG3 and then returns an expected point per shot value (xPPS). Although,
@@ -127,7 +127,7 @@ rid of the intercept entirely. You could over course also remove one of
 FG2 or FG3 as well and keep the intercept, but I like it this way for
 presentation purposes. EMBIID v1.0 is presented below.
 
-![](how_to_make_shot_quality_model_files/eq2.gif)<!-- -->
+<img src="how_to_make_shot_quality_model_files/eq2.PNG" width="290" />
 
 Now, let’s use this model setup to train on 75% of the data and test on
 25% of the data and see how we do. Fun fact, I learned about
