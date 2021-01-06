@@ -231,6 +231,8 @@ two_error <- mltools::rmse(preds = twos$pps_pred,
 three_error <- mltools::rmse(preds = threes$pps_pred, 
                            actuals = threes$pps_actual, 
                            weights = threes$number_of_shots)
+
+write.csv(twos, "r_test.csv")
 ```
 
 Well our attempted weighted RMSE for twos is 0.223 and 0.363 for threes.
