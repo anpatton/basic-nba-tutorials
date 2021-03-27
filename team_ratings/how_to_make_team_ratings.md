@@ -233,6 +233,7 @@ simulate_season <- function(schedule, sd = 2.2) {
                                                           sd = sd)))
   home_win_checks <- runif(n = length(home_win_probs))
   home_win <- as.numeric(home_win_probs >= home_win_checks)
+  ## Good suggestion by Jake Flancer to just use rbinom() and save some code!
   
   return(home_win)
   
@@ -306,35 +307,35 @@ kable(projections)
 
 | team                   | mean |  sd | best\_case | worst\_case |
 |:-----------------------|-----:|----:|-----------:|------------:|
-| Golden State Warriors  | 69.0 | 3.2 |       74.3 |        63.8 |
-| Oklahoma City Thunder  | 57.8 | 4.2 |       64.7 |        50.9 |
-| Toronto Raptors        | 56.0 | 4.0 |       62.6 |        49.5 |
-| Milwaukee Bucks        | 54.6 | 4.1 |       61.4 |        47.8 |
-| New Orleans Pelicans   | 52.2 | 4.0 |       58.8 |        45.7 |
-| Boston Celtics         | 51.1 | 4.1 |       57.8 |        44.4 |
-| Utah Jazz              | 50.5 | 4.1 |       57.3 |        43.7 |
-| Houston Rockets        | 50.3 | 4.9 |       58.5 |        42.2 |
-| Philadelphia 76ers     | 49.3 | 5.0 |       57.5 |        41.1 |
-| Minnesota Timberwolves | 47.8 | 4.1 |       54.5 |        41.1 |
-| Denver Nuggets         | 47.6 | 4.4 |       54.7 |        40.4 |
-| Indiana Pacers         | 47.4 | 4.6 |       54.9 |        39.9 |
-| Washington Wizards     | 47.2 | 4.7 |       54.9 |        39.5 |
-| Portland Trail Blazers | 47.0 | 3.9 |       53.4 |        40.7 |
-| Miami Heat             | 44.0 | 4.5 |       51.3 |        36.6 |
-| Los Angeles Lakers     | 41.9 | 4.2 |       48.9 |        34.9 |
-| Detroit Pistons        | 39.8 | 4.9 |       47.8 |        31.7 |
-| San Antonio Spurs      | 38.9 | 4.8 |       46.8 |        31.0 |
-| Charlotte Hornets      | 36.0 | 4.0 |       42.7 |        29.4 |
-| Brooklyn Nets          | 33.2 | 4.6 |       40.8 |        25.6 |
-| LA Clippers            | 33.2 | 4.0 |       39.7 |        26.7 |
-| Dallas Mavericks       | 32.4 | 4.3 |       39.4 |        25.3 |
-| Memphis Grizzlies      | 30.9 | 4.1 |       37.6 |        24.1 |
-| Orlando Magic          | 29.1 | 3.7 |       35.2 |        23.1 |
-| Cleveland Cavaliers    | 28.0 | 3.9 |       34.5 |        21.6 |
-| Sacramento Kings       | 24.4 | 3.9 |       30.9 |        17.9 |
-| New York Knicks        | 23.6 | 3.7 |       29.7 |        17.4 |
-| Chicago Bulls          | 23.3 | 3.9 |       29.8 |        16.8 |
-| Atlanta Hawks          | 22.8 | 4.2 |       29.7 |        15.8 |
-| Phoenix Suns           | 20.8 | 3.9 |       27.1 |        14.4 |
+| Golden State Warriors  | 69.3 | 3.4 |       74.9 |        63.8 |
+| Oklahoma City Thunder  | 58.0 | 3.9 |       64.4 |        51.6 |
+| Toronto Raptors        | 55.9 | 4.2 |       62.7 |        49.0 |
+| Milwaukee Bucks        | 55.2 | 3.8 |       61.5 |        49.0 |
+| New Orleans Pelicans   | 52.6 | 4.6 |       60.1 |        45.0 |
+| Utah Jazz              | 52.3 | 4.5 |       59.8 |        44.9 |
+| Boston Celtics         | 50.7 | 3.8 |       56.9 |        44.5 |
+| Houston Rockets        | 49.7 | 4.1 |       56.4 |        43.1 |
+| Indiana Pacers         | 49.1 | 3.9 |       55.6 |        42.7 |
+| Philadelphia 76ers     | 48.4 | 4.4 |       55.6 |        41.1 |
+| Denver Nuggets         | 47.7 | 4.5 |       55.2 |        40.3 |
+| Portland Trail Blazers | 47.3 | 3.8 |       53.4 |        41.1 |
+| Minnesota Timberwolves | 47.2 | 4.4 |       54.4 |        39.9 |
+| Washington Wizards     | 46.6 | 4.6 |       54.1 |        39.1 |
+| Miami Heat             | 42.5 | 4.6 |       50.1 |        35.0 |
+| Los Angeles Lakers     | 41.4 | 4.5 |       48.9 |        33.9 |
+| Detroit Pistons        | 39.8 | 4.1 |       46.5 |        33.2 |
+| San Antonio Spurs      | 39.2 | 3.8 |       45.5 |        32.9 |
+| Charlotte Hornets      | 36.4 | 4.3 |       43.5 |        29.3 |
+| Brooklyn Nets          | 33.4 | 4.5 |       40.7 |        26.1 |
+| LA Clippers            | 32.7 | 4.2 |       39.7 |        25.8 |
+| Dallas Mavericks       | 31.8 | 4.1 |       38.5 |        25.1 |
+| Memphis Grizzlies      | 31.1 | 3.9 |       37.6 |        24.6 |
+| Orlando Magic          | 29.0 | 3.8 |       35.3 |        22.8 |
+| Cleveland Cavaliers    | 28.8 | 4.5 |       36.3 |        21.4 |
+| Sacramento Kings       | 24.0 | 4.4 |       31.2 |        16.9 |
+| Chicago Bulls          | 23.7 | 3.8 |       29.9 |        17.4 |
+| New York Knicks        | 23.3 | 4.0 |       29.8 |        16.7 |
+| Atlanta Hawks          | 22.3 | 4.3 |       29.3 |        15.3 |
+| Phoenix Suns           | 20.5 | 4.2 |       27.4 |        13.5 |
 
 And there you have it, win projections done as simply as possible!
