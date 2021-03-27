@@ -185,10 +185,11 @@ actually figure out how to translate ratings to win probability. We’re
 going to cheat a bit here and use some previously conducted research on
 the topic by some of my NBA Twitter colleagues/friends/collaborators.
 
-1.  Rating difference and win/loss was plugged into a logistic
-    regression across many many games and home/away splits. The
-    resulting function takes the coefficients and manually conducts a
-    prediction.
+The rating difference and win/loss was plugged into a logistic
+regression across many many games and home/away splits. The coefficients
+that resulted from that regression are used below as coef1 and coef2.
+The get\_win\_prob function takes the coefficients and manually conducts
+a prediction.
 
 ``` r
 get_win_prob <- function(home_rating, away_rating, sd) {
@@ -211,6 +212,8 @@ This is approximately the standard deviation of the team ratings based
 on the uncertainty in the player ratings based again on prior research.
 Essentially, when we say that Steph is a +7.0, we also imply that he is
 +7.0 +/- some value. No player is *exactly* what they are predicted at.
+The default here of 2.2 is also a value taken from previous research on
+the topic by not-me individuals.
 
 Next, we need to build a function that simulates a season of games. This
 one is kind of hacky but does the trick. Like always, I’m sure there’s a
@@ -307,35 +310,35 @@ kable(projections)
 
 | team                   | mean |  sd | best\_case | worst\_case |
 |:-----------------------|-----:|----:|-----------:|------------:|
-| Golden State Warriors  | 69.3 | 3.4 |       74.9 |        63.8 |
-| Oklahoma City Thunder  | 58.0 | 3.9 |       64.4 |        51.6 |
-| Toronto Raptors        | 55.9 | 4.2 |       62.7 |        49.0 |
-| Milwaukee Bucks        | 55.2 | 3.8 |       61.5 |        49.0 |
-| New Orleans Pelicans   | 52.6 | 4.6 |       60.1 |        45.0 |
-| Utah Jazz              | 52.3 | 4.5 |       59.8 |        44.9 |
-| Boston Celtics         | 50.7 | 3.8 |       56.9 |        44.5 |
-| Houston Rockets        | 49.7 | 4.1 |       56.4 |        43.1 |
-| Indiana Pacers         | 49.1 | 3.9 |       55.6 |        42.7 |
-| Philadelphia 76ers     | 48.4 | 4.4 |       55.6 |        41.1 |
-| Denver Nuggets         | 47.7 | 4.5 |       55.2 |        40.3 |
-| Portland Trail Blazers | 47.3 | 3.8 |       53.4 |        41.1 |
-| Minnesota Timberwolves | 47.2 | 4.4 |       54.4 |        39.9 |
-| Washington Wizards     | 46.6 | 4.6 |       54.1 |        39.1 |
-| Miami Heat             | 42.5 | 4.6 |       50.1 |        35.0 |
-| Los Angeles Lakers     | 41.4 | 4.5 |       48.9 |        33.9 |
-| Detroit Pistons        | 39.8 | 4.1 |       46.5 |        33.2 |
-| San Antonio Spurs      | 39.2 | 3.8 |       45.5 |        32.9 |
-| Charlotte Hornets      | 36.4 | 4.3 |       43.5 |        29.3 |
-| Brooklyn Nets          | 33.4 | 4.5 |       40.7 |        26.1 |
-| LA Clippers            | 32.7 | 4.2 |       39.7 |        25.8 |
-| Dallas Mavericks       | 31.8 | 4.1 |       38.5 |        25.1 |
-| Memphis Grizzlies      | 31.1 | 3.9 |       37.6 |        24.6 |
-| Orlando Magic          | 29.0 | 3.8 |       35.3 |        22.8 |
-| Cleveland Cavaliers    | 28.8 | 4.5 |       36.3 |        21.4 |
-| Sacramento Kings       | 24.0 | 4.4 |       31.2 |        16.9 |
-| Chicago Bulls          | 23.7 | 3.8 |       29.9 |        17.4 |
-| New York Knicks        | 23.3 | 4.0 |       29.8 |        16.7 |
-| Atlanta Hawks          | 22.3 | 4.3 |       29.3 |        15.3 |
-| Phoenix Suns           | 20.5 | 4.2 |       27.4 |        13.5 |
+| Golden State Warriors  | 69.7 | 3.0 |       74.6 |        64.7 |
+| Oklahoma City Thunder  | 57.8 | 4.1 |       64.6 |        51.0 |
+| Toronto Raptors        | 55.9 | 3.9 |       62.3 |        49.5 |
+| Milwaukee Bucks        | 54.4 | 3.9 |       60.8 |        48.0 |
+| New Orleans Pelicans   | 52.6 | 3.8 |       58.9 |        46.4 |
+| Utah Jazz              | 50.8 | 4.2 |       57.8 |        43.8 |
+| Boston Celtics         | 50.6 | 4.0 |       57.2 |        44.0 |
+| Houston Rockets        | 50.6 | 4.4 |       57.8 |        43.4 |
+| Philadelphia 76ers     | 48.5 | 3.9 |       54.9 |        42.0 |
+| Denver Nuggets         | 47.5 | 4.6 |       55.1 |        39.8 |
+| Minnesota Timberwolves | 47.5 | 3.7 |       53.6 |        41.3 |
+| Indiana Pacers         | 47.1 | 4.3 |       54.3 |        40.0 |
+| Portland Trail Blazers | 46.8 | 4.0 |       53.4 |        40.1 |
+| Washington Wizards     | 46.6 | 4.4 |       53.9 |        39.3 |
+| Miami Heat             | 43.5 | 4.3 |       50.5 |        36.5 |
+| Los Angeles Lakers     | 41.1 | 4.0 |       47.7 |        34.6 |
+| Detroit Pistons        | 40.3 | 4.4 |       47.5 |        33.1 |
+| San Antonio Spurs      | 39.3 | 4.3 |       46.3 |        32.3 |
+| Charlotte Hornets      | 36.5 | 4.6 |       44.1 |        29.0 |
+| Brooklyn Nets          | 34.3 | 4.6 |       41.9 |        26.7 |
+| LA Clippers            | 32.3 | 4.1 |       39.0 |        25.6 |
+| Dallas Mavericks       | 32.2 | 4.2 |       39.2 |        25.3 |
+| Memphis Grizzlies      | 31.5 | 4.3 |       38.6 |        24.5 |
+| Orlando Magic          | 29.3 | 4.2 |       36.1 |        22.4 |
+| Cleveland Cavaliers    | 28.4 | 4.2 |       35.4 |        21.4 |
+| New York Knicks        | 24.6 | 3.6 |       30.5 |        18.6 |
+| Sacramento Kings       | 24.3 | 3.7 |       30.4 |        18.2 |
+| Chicago Bulls          | 23.0 | 4.4 |       30.2 |        15.8 |
+| Atlanta Hawks          | 22.8 | 4.0 |       29.4 |        16.1 |
+| Phoenix Suns           | 20.2 | 3.9 |       26.6 |        13.9 |
 
 And there you have it, win projections done as simply as possible!
