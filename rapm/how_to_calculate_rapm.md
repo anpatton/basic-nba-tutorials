@@ -22,6 +22,9 @@ two. First we read in data from [Ryan Davis’
 GitHub](https://github.com/rd11490/NBA_Tutorials), pretty much the best
 place for more advanced python tutorials.
 
+**This is the most basic, vanilla, low frills, least optimized version
+of RAPM possible**
+
 ``` r
 library(tidyverse)
 library(Matrix)
@@ -31,11 +34,7 @@ library(knitr)
 possesion_data <- read_csv("https://raw.githubusercontent.com/rd11490/NBA_Tutorials/master/rapm/data/rapm_possessions.csv") %>% 
   filter(possessions != 0) %>% 
   select(-X1)
-```
 
-    ## Warning: Missing column names filled in: 'X1' [1]
-
-``` r
 player_data <- read_csv("https://raw.githubusercontent.com/rd11490/NBA_Tutorials/master/rapm/data/player_names.csv")
 
 head(possesion_data)
@@ -228,11 +227,11 @@ kable(rapm[1:5, ] %>%
 
 |     Player     | RAPM | O-RAPM | D-RAPM |
 |:--------------:|:----:|:------:|:------:|
-|  Kevin Durant  | 4.5  |  4.7   |  -0.2  |
-| Stephen Curry  | 4.2  |  3.4   |  0.8   |
-|  Paul George   | 4.1  |  2.8   |  1.3   |
-| Christian Wood | 4.1  |  -0.6  |  4.7   |
-| Malik Beasley  | 4.0  |  1.3   |  2.8   |
+|  Kevin Durant  | 4.1  |  4.3   |  -0.2  |
+| Stephen Curry  | 3.9  |  3.2   |  0.7   |
+| Christian Wood | 3.7  |  -0.5  |  4.3   |
+|  Kevon Looney  | 3.6  |  1.6   |  2.0   |
+|  James Harden  | 3.6  |  3.1   |  0.5   |
 
 And there you have it. Very important caveat - single year RAPM, which
 is what this is, is extremely unstable. When at all possible, use three
