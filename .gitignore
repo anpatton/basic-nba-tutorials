@@ -160,7 +160,6 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
-*.Rmd
 
 # application files
 /rsconnect
@@ -170,6 +169,5 @@ vignettes/*.pdf
 *.feather
 *.Rproj
 shot-quality/create_data.R
-shot-quality/court_lines.R
 shot-quality/KOBE model v2.RData
 *.idea
